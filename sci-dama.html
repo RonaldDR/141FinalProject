@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SciDama</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		canvas {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="dama"></canvas>
+	<script>
+		var canvas = document.getElementById('dama');
+		var context = canvas.getContext('2d');
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		setInterval(world, 30);
+
+		var current = undefined;
+
+		var tiles = [];
+		var ctr = 0;
+		var di = 70;
+		var initx = canvas.width/2 - (8 * di) / 2;
+		var inity = canvas.height/2 - (8 * di) / 2;
+		function generateTiles() {
+			for (var j = inity; j < inity+8*di; j+=di) {
+				for (var i = initx; i < initx+8*di; i+=di) {
+					tiles.push(new Tile(i,j,ctr%2));
+					ctr++;
+				}
+				ctr++;
+			}
+		}
+		generateTiles();
+
+		var p1 = [];
+		var p2 = [];
+		function generatePieces() {
+			var ctr = 0;
+			for (var i = 0; i < tiles.length && ctr < 12; i++) {
+				if (tiles[i].t == 0) {
+					p1.push(new Piece(tiles[i].x, tiles[i].y, 0));
+					ctr++;
+				}
+			}
+			var ctr = 0;
+			for (var i = tiles.length-1; i >= 0 && ctr < 12; i--) {
+				if (tiles[i].t == 0) {
+					p2.push(new Piece(tiles[i].x, tiles[i].y, 1));
+					ctr++;
+				}
+			}
+		}
+		generatePieces();
+
+		function clearCanvas() {
+			context.fillStyle = '#666';
+			context.fillRect(0,0,canvas.width,canvas.height);
+		}
+
+		function getHyp(x1,y1,x2,y2) {
+			var diffx = x1 - x2;
+			var diffy = y1 - y2;
+			return Math.sqrt(diffx * diffx + diffy * diffy);
+		}
+
+		function world() {
+			clearCanvas();
+			for (var i = 0; i < tiles.length; i++) {
+				tiles[i].draw();
+			}
+			for (var i = 0; i < p1.length; i++) {
+				p1[i].draw();
+				p2[i].draw();
+			}
+			current.highlight();
+		}
+
+		function Tile(x, y, t) {
+			this.x = x;
+			this.y = y;
+			this.t = t;
+			this.dim = di;
+			this.draw = function() {
+				context.fillStyle = this.t == 1 ? '#000' : '#fff';
+				context.fillRect(this.x, this.y, this.dim, this.dim);
+			}
+		}
+
+		function Piece(x,y,p) {
+			this.x = x;
+			this.y = y;
+			this.p = p;
+			this.radius = 30;
+			this.draw = function() {
+				context.fillStyle = this.p == 1 ? '#f00' : '#00f';
+				context.beginPath();
+				context.arc(this.x + di/2, this.y + di/2, this.radius, Math.PI*2, false);
+				context.fill();
+			}
+			this.highlight = function() {
+				context.fillStyle = this.p == 1 ? 'rgba(255,0,0,0.3)' : 'rgba(0,0,255,0.3)';
+				context.fillRect(this.x, this.y, di, di);
+			}
+		}
+
+		window.addEventListener('click', function(e) {
+			for (var i = 0; i < p1.length; i++) {
+				if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
+					current = p1[i];
+				}
+			}
+			for (var i = 0; i < p2.length; i++) {
+				if (getHyp(e.pageX, e.pageY, p2[i].x + di / 2, p2[i].y + di / 2) <= p2[i].radius) {
+					current = p2[i];
+				}
+			}
+		});
+	</script>
+</body>
+</html>
