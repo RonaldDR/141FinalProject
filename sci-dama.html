@@ -74,7 +74,7 @@
 		}
 
 		var states = [];
-		function addStates(){
+		function generateStates(){
 			var j = 0;
 			for(var i = 0; i < tiles.length; i++){
 				if(tiles[i].t == 0){
@@ -82,7 +82,7 @@
 				}
 			}
 		}
-		addStates();
+		generateStates();
 		console.log(states);
 
 		function nextStates(){
