@@ -29,6 +29,7 @@
 		var di = 70;
 		var initx = canvas.width/2 - (8 * di) / 2;
 		var inity = canvas.height/2 - (8 * di) / 2;
+
 		function generateTiles() {
 			for (var j = inity; j < inity+8*di; j+=di) {
 				for (var i = initx; i < initx+8*di; i+=di) {
@@ -57,6 +58,7 @@
 					ctr++;
 				}
 			}
+
 		}
 		generatePieces();
 
@@ -71,6 +73,22 @@
 			return Math.sqrt(diffx * diffx + diffy * diffy);
 		}
 
+		var states = [];
+		function addStates(){
+			var j = 0;
+			for(var i = 0; i < tiles.length; i++){
+				if(tiles[i].t == 0){
+					states.push(new Tile(tiles[i].x, tiles[i].y, 0));
+				}
+			}
+		}
+		addStates();
+		console.log(states);
+
+		function nextStates(){
+
+		}
+
 		function world() {
 			clearCanvas();
 			for (var i = 0; i < tiles.length; i++) {
@@ -80,7 +98,9 @@
 				p1[i].draw();
 				p2[i].draw();
 			}
-			current.highlight();
+			if(current){
+				current.highlight();			
+			}
 		}
 
 		function Tile(x, y, t) {
@@ -109,20 +129,36 @@
 				context.fillStyle = this.p == 1 ? 'rgba(255,0,0,0.3)' : 'rgba(0,0,255,0.3)';
 				context.fillRect(this.x, this.y, di, di);
 			}
+			
 		}
-
-		window.addEventListener('click', function(e) {
+		
+		var temp = -1;
+		window.addEventListener('click', function(e) {	
 			for (var i = 0; i < p1.length; i++) {
 				if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
 					current = p1[i];
+					temp = i;
+					console.log(current);
 				}
 			}
 			for (var i = 0; i < p2.length; i++) {
 				if (getHyp(e.pageX, e.pageY, p2[i].x + di / 2, p2[i].y + di / 2) <= p2[i].radius) {
 					current = p2[i];
+					temp = i;
 				}
 			}
+			for(var i = 0; i< 32; i++){
+				if(getHyp(e.pageX, e.pageY, states[i].x + di / 2, states[i].y + di / 2) <= p1[temp].radius){
+					current.x = states[i].x;
+					current.y = states[i].y;
+					console.log(current);
+					console.log(p1[temp]);
+				}
+			}
+			
 		});
+
+
 	</script>
 </body>
 </html>
