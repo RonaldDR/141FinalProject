@@ -23,6 +23,7 @@
 		setInterval(world, 30);
 
 		var current = undefined;
+		var currfield = undefined;
 
 		var tiles = [];
 		var ctr = 0;
@@ -31,12 +32,13 @@
 		var inity = canvas.height/2 - (8 * di) / 2;
 		var p1 = [];
 		var p2 = [];
-		var states = [];
+		var field = [];
+		var pick = 0;
 
 		function generateTiles() {
 			for (var j = inity; j < inity+8*di; j+=di) {
 				for (var i = initx; i < initx+8*di; i+=di) {
-					tiles.push(new Tile(i,j,ctr%2));
+					tiles.push(new Tile(i,j,ctr%2, 0));
 					ctr++;
 				}
 				ctr++;
@@ -46,16 +48,20 @@
 
 		function generatePieces() {
 			var ctr = 0;
+			var y = 0;
 			for (var i = 0; i < tiles.length && ctr < 12; i++) {
 				if (tiles[i].t == 0) {
-					p1.push(new Piece(tiles[i].x, tiles[i].y, 0));
+					p1.push(new Piece(tiles[i].x, tiles[i].y, 0, y));
+					y++;
 					ctr++;
 				}
 			}
 			var ctr = 0;
+			var z = 31;
 			for (var i = tiles.length-1; i >= 0 && ctr < 12; i--) {
 				if (tiles[i].t == 0) {
-					p2.push(new Piece(tiles[i].x, tiles[i].y, 1));
+					p2.push(new Piece(tiles[i].x, tiles[i].y, 1, z));
+					z--;
 					ctr++;
 				}
 			}
@@ -63,15 +69,53 @@
 		}
 		generatePieces();
 
-		function generateStates(){
+		function generateField(){
 			var j = 0;
 			for(var i = 0; i < tiles.length; i++){
 				if(tiles[i].t == 0){
-					states.push(new Tile(tiles[i].x, tiles[i].y, 0));
+					if(i < 24){
+						field.push(new Tile(tiles[i].x, tiles[i].y, 0, 1));
+					}
+					else if(i > 39){
+						field.push(new Tile(tiles[i].x, tiles[i].y, 0, 2));
+					}
+					else{
+						field.push(new Tile(tiles[i].x, tiles[i].y, 0, 0));
+					}
 				}
 			}
 		}
-		generateStates();
+		generateField();
+
+		function Tile(x, y, t, c) {
+			this.x = x;
+			this.y = y;
+			this.t = t;
+			this.c = c;
+			this.dim = di;
+			this.draw = function() {
+				context.fillStyle = this.t == 1 ? '#000' : '#fff';
+				context.fillRect(this.x, this.y, this.dim, this.dim);
+			}
+			this.highlight = function() {
+				context.fillStyle = this.p == 1 ? 'rgba(255,0,0,0.3)' : 'rgba(0,0,255,0.3)';
+				context.fillRect(this.x, this.y, di, di);
+			}
+		}
+
+		function Piece(x,y,p, i) {
+			this.x = x;
+			this.y = y;
+			this.p = p;
+			this.i = i;
+			this.radius = 30;
+			this.draw = function() {
+				context.fillStyle = this.p == 1 ? '#f00' : '#00f';
+				context.beginPath();
+				context.arc(this.x + di/2, this.y + di/2, this.radius, Math.PI*2, false);
+				context.fill();
+			}			
+		}
 
 		function clearCanvas() {
 			context.fillStyle = '#666';
@@ -92,60 +136,39 @@
 			for (var i = 0; i < p1.length; i++) {
 				p1[i].draw();
 				p2[i].draw();
-			}
-			if(current){
-				current.highlight();			
 			}	
-		}
-
-		function Tile(x, y, t) {
-			this.x = x;
-			this.y = y;
-			this.t = t;
-			this.dim = di;
-			this.draw = function() {
-				context.fillStyle = this.t == 1 ? '#000' : '#fff';
-				context.fillRect(this.x, this.y, this.dim, this.dim);
+			if(currfield && pick == 1){
+				currfield.highlight();
 			}
 		}
-
-		function Piece(x,y,p) {
-			this.x = x;
-			this.y = y;
-			this.p = p;
-			this.radius = 30;
-			this.draw = function() {
-				context.fillStyle = this.p == 1 ? '#f00' : '#00f';
-				context.beginPath();
-				context.arc(this.x + di/2, this.y + di/2, this.radius, Math.PI*2, false);
-				context.fill();
-			}
-			this.highlight = function() {
-				context.fillStyle = this.p == 1 ? 'rgba(255,0,0,0.3)' : 'rgba(0,0,255,0.3)';
-				context.fillRect(this.x, this.y, di, di);
-			}
-			
-		}
-		
-		var temp = -1;
-		window.addEventListener('click', function(e) {	
-			for (var i = 0; i < p1.length; i++) {
-				if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
-					current = p1[i];
-					temp = i;
+		console.log(field.length);
+		window.addEventListener('click', function(e) {
+			if(pick == 1){
+				for(var i = 0; i< 32; i++){
+					if(getHyp(e.pageX, e.pageY, field[i].x + di / 2, field[i].y + di / 2) <= 30 && current && field[i].c == 0){
+						current.x = field[i].x;
+						current.y = field[i].y;
+						field[i].c = 1;
+						current.i = i;
+						currfield = field[current.i];
+						pick = 0;
+					}
 				}
 			}
-			for (var i = 0; i < p2.length; i++) {
-				if (getHyp(e.pageX, e.pageY, p2[i].x + di / 2, p2[i].y + di / 2) <= p2[i].radius) {
-					current = p2[i];
-					temp = i;
+			else if(pick == 0){
+				for (var i = 0; i < p1.length; i++) {
+					if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
+						current = p1[i];
+						currfield = field[current.i];
+						pick = 1;
+					}
 				}
-			}
-			for(var i = 0; i< 32; i++){
-				if(getHyp(e.pageX, e.pageY, states[i].x + di / 2, states[i].y + di / 2) <= p1[temp].radius){
-					current.x = states[i].x;
-					current.y = states[i].y;
-					console.log(p1[temp]);
+				for (var i = 0; i < p2.length; i++) {
+					if (getHyp(e.pageX, e.pageY, p2[i].x + di / 2, p2[i].y + di / 2) <= p2[i].radius) {
+						current = p2[i];
+						currfield = field[current.i];
+						pick = 1;
+					}
 				}
 			}
 			
