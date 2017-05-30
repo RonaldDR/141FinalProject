@@ -34,7 +34,7 @@
 		var p2 = [];
 		var field = [];
 		var pick = 0;
-		var adjacentfields = new Node(-1,-1);
+		var adjacentfields = new Node(-1,-1, -1, -1);
 		var turn = 1;
 		var adjacents1 = [];
 		var adjacents2 = [];
@@ -123,9 +123,11 @@
 			}			
 		}
 
-		function Node(l, r){
+		function Node(l, r, bl, br){
 			this.right = r;
 			this.left = l;
+			this.bright = br;
+			this.bleft = bl;
 		}
 // =============================MINI FUNCS============================
 		function clearCanvas() {
@@ -138,87 +140,118 @@
 			return Math.sqrt(diffx * diffx + diffy * diffy);
 		}
 		function fillAdjacents(){
-			adjacents1[0] = new Node(-1,4);
-			adjacents1[1] = new Node(4,5);
-			adjacents1[2] = new Node(5,6);
-			adjacents1[3] = new Node(6,7);
-			adjacents1[4] = new Node(8,9);
-			adjacents1[5] = new Node(9,10);
-			adjacents1[6] = new Node(10,11);
-			adjacents1[7] = new Node(11,-1);
-			adjacents1[8] = new Node(-1,12);
-			adjacents1[9] = new Node(12,13);
-			adjacents1[10] = new Node(13,14);
-			adjacents1[11] = new Node(14,15);
-			adjacents1[12] = new Node(16,17);
-			adjacents1[13] = new Node(17,18);
-			adjacents1[14] = new Node(18,19);
-			adjacents1[15] = new Node(19,-1);
-			adjacents1[16] = new Node(-1,20);
-			adjacents1[17] = new Node(20,21);
-			adjacents1[18] = new Node(21,22);
-			adjacents1[19] = new Node(22,23);
-			adjacents1[20] = new Node(24,25);
-			adjacents1[21] = new Node(25,26);
-			adjacents1[22] = new Node(26,27);
-			adjacents1[23] = new Node(27,-1);
-			adjacents1[24] = new Node(-1,28);
-			adjacents1[25] = new Node(28,29);
-			adjacents1[26] = new Node(29,30);
-			adjacents1[27] = new Node(30,31);
-			adjacents1[28] = new Node(-1,-1);
-			adjacents1[29] = new Node(-1,-1);
-			adjacents1[30] = new Node(-1,-1);
-			adjacents1[31] = new Node(-1,-1);
+			adjacents1[0] = new Node(-1,4,-1,-1);
+			adjacents1[1] = new Node(4,5,-1,-1);
+			adjacents1[2] = new Node(5,6,-1,-1);
+			adjacents1[3] = new Node(6,7,-1,-1);
+			adjacents1[4] = new Node(8,9,0,1);
+			adjacents1[5] = new Node(9,10,1,2);
+			adjacents1[6] = new Node(10,11,2,3);
+			adjacents1[7] = new Node(11,-1,3,-1);
+			adjacents1[8] = new Node(-1,12,-1,4);
+			adjacents1[9] = new Node(12,13,4,5);
+			adjacents1[10] = new Node(13,14,5,6);
+			adjacents1[11] = new Node(14,15,6,7);
+			adjacents1[12] = new Node(16,17,8,9);
+			adjacents1[13] = new Node(17,18,9,10);
+			adjacents1[14] = new Node(18,19,10,11);
+			adjacents1[15] = new Node(19,-1,11,-1);
+			adjacents1[16] = new Node(-1,20,-1,12);
+			adjacents1[17] = new Node(20,21,12,13);
+			adjacents1[18] = new Node(21,22,13,14);
+			adjacents1[19] = new Node(22,23,14,15);
+			adjacents1[20] = new Node(24,25,16,17);
+			adjacents1[21] = new Node(25,26,17,18);
+			adjacents1[22] = new Node(26,27,18,19);
+			adjacents1[23] = new Node(27,-1,19,-1);
+			adjacents1[24] = new Node(-1,28,-1,20);
+			adjacents1[25] = new Node(28,29,20,21);
+			adjacents1[26] = new Node(29,30,21,22);
+			adjacents1[27] = new Node(30,31,22,23);
+			adjacents1[28] = new Node(-1,-1,24,25);
+			adjacents1[29] = new Node(-1,-1,25,26);
+			adjacents1[30] = new Node(-1,-1,26,27);
+			adjacents1[31] = new Node(-1,-1,27,-1);
 
-			adjacents2[0] = new Node(-1,-1);
-			adjacents2[1] = new Node(-1,-1);
-			adjacents2[2] = new Node(-1,-1);
-			adjacents2[3] = new Node(-1,-1);
-			adjacents2[4] = new Node(0,1);
-			adjacents2[5] = new Node(1,2);
-			adjacents2[6] = new Node(2,3);
-			adjacents2[7] = new Node(3,-1);
-			adjacents2[8] = new Node(-1,4);
-			adjacents2[9] = new Node(4,5);
-			adjacents2[10] = new Node(5,6);
-			adjacents2[11] = new Node(6,7);
-			adjacents2[12] = new Node(8,9);
-			adjacents2[13] = new Node(9,10);
-			adjacents2[14] = new Node(10,11);
-			adjacents2[15] = new Node(11,-1);
-			adjacents2[16] = new Node(-1,12);
-			adjacents2[17] = new Node(12,13);
-			adjacents2[18] = new Node(13,14);
-			adjacents2[19] = new Node(14,15);
-			adjacents2[20] = new Node(16,17);
-			adjacents2[21] = new Node(17,18);
-			adjacents2[22] = new Node(18,19);
-			adjacents2[23] = new Node(19,-1);
-			adjacents2[24] = new Node(-1,20);
-			adjacents2[25] = new Node(20,21);
-			adjacents2[26] = new Node(21,22);
-			adjacents2[27] = new Node(22,23);
-			adjacents2[28] = new Node(24,25);
-			adjacents2[29] = new Node(25,26);
-			adjacents2[30] = new Node(26,27);
-			adjacents2[31] = new Node(27,-1);
+			adjacents2[0] = new Node(-1,-1,-1,4);
+			adjacents2[1] = new Node(-1,-1,4,5);
+			adjacents2[2] = new Node(-1,-1,5,6);
+			adjacents2[3] = new Node(-1,-1,6,7);
+			adjacents2[4] = new Node(0,1,8,9);
+			adjacents2[5] = new Node(1,2,9,10);
+			adjacents2[6] = new Node(2,3,10,11);
+			adjacents2[7] = new Node(3,-1,11,-1);
+			adjacents2[8] = new Node(-1,4,-1,12);
+			adjacents2[9] = new Node(4,5,12,13);
+			adjacents2[10] = new Node(5,6,13,14);
+			adjacents2[11] = new Node(6,7,14,15);
+			adjacents2[12] = new Node(8,9,16,17);
+			adjacents2[13] = new Node(9,10,17,18);
+			adjacents2[14] = new Node(10,11,18,19);
+			adjacents2[15] = new Node(11,-1,19,-1);
+			adjacents2[16] = new Node(-1,12,-1,20);
+			adjacents2[17] = new Node(12,13,20,21);
+			adjacents2[18] = new Node(13,14,21,22);
+			adjacents2[19] = new Node(14,15,22,23);
+			adjacents2[20] = new Node(16,17,24,25);
+			adjacents2[21] = new Node(17,18,25,26);
+			adjacents2[22] = new Node(18,19,26,27);
+			adjacents2[23] = new Node(19,-1,27,-1);
+			adjacents2[24] = new Node(-1,20,-1,28);
+			adjacents2[25] = new Node(20,21,28,29);
+			adjacents2[26] = new Node(21,22,29,30);
+			adjacents2[27] = new Node(22,23,30,31);
+			adjacents2[28] = new Node(24,25,-1,-1);
+			adjacents2[29] = new Node(25,26,-1,-1);
+			adjacents2[30] = new Node(26,27,-1,-1);
+			adjacents2[31] = new Node(27,-1,-1,-1);
 		}
 		fillAdjacents();
 		function getAdj(x, p){
-			var adjarr = new Node(-1,-1);
+			var adjarr = new Node(-1,-1, -1, -1);
 			if (p == 1) {
 				adjarr.right = adjacents1[x].right;					// retrieve adjacents
-				adjarr.left = adjacents1[x].left;					// retrieve adjacents
+				adjarr.left = adjacents1[x].left;
+				adjarr.bright = adjacents1[x].bright;					// retrieve adjacents
+				adjarr.bleft = adjacents1[x].bleft;
+				if(adjarr.bright != -1){									// if ok ang bright
+					if(field[adjarr.bright].c == 2){						// if kaon sa bright
+						adjarr.bright = adjacents1[adjarr.bright].bright; 	// adto sa atbang
+						if(field[adjarr.bright].c != 0){					// check if vacant
+							adjarr.bright = -1;								// kung dili, dili pwede
+						}
+					}
+					else{
+						adjarr.bright = -1;
+					}
+				}
+				if(adjarr.bleft != -1){
+					if(field[adjarr.bleft].c == 2){
+						adjarr.bleft = adjacents1[adjarr.bleft].bleft;
+						if(field[adjarr.bleft].c != 0){
+							adjarr.bleft = -1;
+						}
+					}
+					else{
+						adjarr.bleft = -1;
+					}
+				}
+
 				if(adjarr.right != -1 && adjarr.left != -1){
 					if(field[adjarr.right].c == 2){				// if adjacent is not empty
 						adjarr.right = adjacents1[adjarr.right].right;
+						if(field[adjarr.right].c != 0){
+							adjarr.right = -1;
+						}
 					}
 					else if(field[adjarr.right].c == 1){
 						adjarr.right = -1;
 					}
 					if(field[adjarr.left].c == 2){
 						adjarr.left = adjacents1[adjarr.left].left;
+						if(field[adjarr.left].c != 0){
+							adjarr.left = -1;
+						}
 					}
 					else if(field[adjarr.left].c == 1){
 						adjarr.left = -1;
@@ -227,6 +260,9 @@
 				if(adjarr.right != -1 && adjarr.left == -1){	// if move to right is possible and move to left is not
 					if(field[adjarr.right].c == 2){				// if adjacent is not empty
 						adjarr.right = adjacents1[adjarr.right].right;
+						if(field[adjarr.right].c != 0){
+							adjarr.right = -1;
+						}
 					}
 					else if(field[adjarr.right].c == 1){
 						adjarr.right = -1;
@@ -235,24 +271,60 @@
 				if(adjarr.right == -1 && adjarr.left != -1){	// if move to right is not and move to left is possible
 					if(field[adjarr.left].c == 2){
 						adjarr.left = adjacents1[adjarr.left].left;
+						if(field[adjarr.left].c != 0){
+							adjarr.left = -1;
+						}
 					}
 					else if(field[adjarr.left].c == 1){
 						adjarr.left = -1;
 					}
 				}
 			}
-			else {
+			else {			// if player 2
 				adjarr.right = adjacents2[x].right;					// retrieve adjacents
 				adjarr.left = adjacents2[x].left;					// retrieve adjacents
+				adjarr.bright = adjacents2[x].bright;
+				adjarr.bleft = adjacents2[x].bleft;
+
+				if(adjarr.bright != -1){
+					if(field[adjarr.bright].c == 1){
+						adjarr.bright = adjacents2[adjarr.bright].bright;
+						if(field[adjarr.bright].c != 0){
+							adjarr.bright = -1;
+						}
+					}
+					else{
+						adjarr.bright = -1;
+					}
+				}
+
+				if(adjarr.bleft != -1){
+					if(field[adjarr.bleft].c == 1){
+						adjarr.bleft = adjacents2[adjarr.bleft].bleft;
+						if(field[adjarr.bleft].c != 0){
+							adjarr.bleft = -1;
+						}
+					}
+					else{
+						adjarr.bleft = -1;
+					}
+				}
+
 				if(adjarr.right != -1 && adjarr.left != -1){
 					if(field[adjarr.right].c == 1){				// if adjacent is not empty
 						adjarr.right = adjacents2[adjarr.right].right;
+						if(field[adjarr.right].c != 0){
+							adjarr.right = -1;
+						}
 					}
 					else if(field[adjarr.right].c == 2){
 						adjarr.right = -1;
 					}
 					if(field[adjarr.left].c == 1){
 						adjarr.left = adjacents2[adjarr.left].left;
+						if(field[adjarr.left].c != 0){
+							adjarr.left = -1;
+						}
 					}
 					else if(field[adjarr.left].c == 2){
 						adjarr.left = -1;
@@ -261,6 +333,9 @@
 				if(adjarr.right != -1 && adjarr.left == -1){	// move to right is possible and move to left is not
 					if(field[adjarr.right].c == 1){				// if adjacent is not empty
 						adjarr.right = adjacents2[adjarr.right].right;
+						if(field[adjarr.right].c != 0){
+							adjarr.right = -1;
+						}
 					}
 					else if(field[adjarr.right].c == 2){
 						adjarr.right = -1;
@@ -269,6 +344,9 @@
 				if(adjarr.right == -1 && adjarr.left != -1){
 					if(field[adjarr.left].c == 1){
 						adjarr.left = adjacents2[adjarr.left].left;
+						if(field[adjarr.left].c != 0){
+							adjarr.left = -1;
+						}
 					}
 					else if(field[adjarr.left].c == 2){
 						adjarr.left = -1;
@@ -278,7 +356,7 @@
 			return adjarr;
 		}
 		function contains(x, arr){
-			if(x == arr.right || x == arr.left)
+			if(x == arr.right || x == arr.left || x == arr.bright || x == arr.bleft)
 				return true;
 			else
 				return false;
@@ -325,6 +403,12 @@
 			if(adjacentfields.left != -1){
 				field[adjacentfields.left].highlight();
 			}
+			if(adjacentfields.bright != -1){
+				field[adjacentfields.bright].highlight();
+			}
+			if(adjacentfields.bleft != -1){
+				field[adjacentfields.bleft].highlight();
+			}
 
 			if(currfield && pick == 1){
 				currfield.highlight();
@@ -344,47 +428,101 @@
 
 							if(turn == 1){					// change turn
 								field[i].c = 1;				// wheredropped field status = occupied 
-								if(adjacentfields.right != adjacents1[temp].right){	// check if enemy eaten
-									for(var i = 0; i < p2.length; i++){
-										if(p2[i].i == adjacents1[temp].right){		// know eaten piece
-											p2.splice(i,1);
+								if(adjacents1[temp].right != -1){
+									if(current.i == adjacents1[adjacents1[temp].right].right){	// check if enemy eaten
+										field[adjacents1[temp].right].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p2.length; i++){
+											if(p2[i].i == adjacents1[temp].right){		// know eaten piece
+												p2.splice(i,1);
+											}
 										}
-									}
-									
-								}
-								if(adjacentfields.left != adjacents1[temp].left){	// check if enemy eaten
-									for(var i = 0; i < p2.length; i++){
-										if(p2[i].i == adjacents1[temp].left){		// know eaten piece
-											p2.splice(i,1);
-										}
+
 									}
 								}
+								if(adjacents1[temp].left != -1){
+									if(current.i == adjacents1[adjacents1[temp].left].left){	// check if enemy eaten
+										field[adjacents1[temp].left].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p2.length; i++){
+											if(p2[i].i == adjacents1[temp].left){		// know eaten piece
+												p2.splice(i,1);
+											}
+										}
+									}
+								}
+								if(adjacents1[temp].bright != -1){
+									if(current.i == adjacents1[adjacents1[temp].bright].bright){	// check if enemy eaten
+										field[adjacents1[temp].bright].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p2.length; i++){
+											if(p2[i].i == adjacents1[temp].bright){		// know eaten piece
+												p2.splice(i,1);
+											}
+										}
+
+									}
+								}
+								if(adjacents1[temp].bleft != -1){
+									if(current.i == adjacents1[adjacents1[temp].bleft].bleft){	// check if enemy eaten
+										field[adjacents1[temp].bleft].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p2.length; i++){
+											if(p2[i].i == adjacents1[temp].bleft){		// know eaten piece
+												p2.splice(i,1);
+											}
+										}
+									}
+								}
+
 								turn = 2;
 							}
-							else{
+							else{								// move sa player 2
 								field[i].c = 2;					// wheredropped field status = occupied
-								if(adjacentfields.right != adjacents2[temp].right){	// check of enemy eaten
-									for(var i = 0; i < p1.length; i++){
-										if(p1[i].i == adjacents2[temp].right){		// know eaten piece
-											p1.splice(i,1);
+								if(adjacents2[temp].right != -1){
+									if(current.i == adjacents2[adjacents2[temp].right].right){	// check of enemy eaten
+										field[adjacents2[temp].right].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p1.length; i++){
+											if(p1[i].i == adjacents2[temp].right){		// know eaten piece
+												p1.splice(i,1);
+											}
 										}
 									}
 								}
-								if(adjacentfields.left != adjacents2[temp].left){	// check of enemy eaten
-									for(var i = 0; i < p1.length; i++){
-										if(p1[i].i == adjacents2[temp].left){		// know eaten piece
-											p1.splice(i,1);
+								if(adjacents2[temp].left != -1){
+									if(current.i == adjacents2[adjacents2[temp].left].left){	// check of enemy eaten
+										field[adjacents2[temp].left].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p1.length; i++){
+											if(p1[i].i == adjacents2[temp].left){		// know eaten piece
+												p1.splice(i,1);
+											}
+										}
+									}
+								}
+								if(adjacents2[temp].bright != -1){
+									if(current.i == adjacents2[adjacents2[temp].bright].bright){	// check if enemy eaten
+										field[adjacents2[temp].bright].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p1.length; i++){
+											if(p1[i].i == adjacents2[temp].bright){		// know eaten piece
+												p1.splice(i,1);
+											}
+										}
+									}
+								}
+								if(adjacents2[temp].bleft != -1){
+									if(current.i == adjacents2[adjacents2[temp].bleft].bleft){	// check if enemy eaten
+										field[adjacents2[temp].bleft].c = 0;			// change ang field.c sa gikaon
+										for(var i = 0; i < p1.length; i++){
+											if(p1[i].i == adjacents2[temp].bleft){		// know eaten piece
+												p1.splice(i,1);
+											}
 										}
 									}
 								}
 								turn = 1;
 							}
-							adjacentfields = new Node(-1,-1);	// empty adjacent fields
+							adjacentfields = new Node(-1,-1, -1, -1);	// empty adjacent fields
 						}
 						if(field[i] == currfield){			// drop piece on place
 							field[i].c = turn;
 							pick = 0;						
-							adjacentfields = new Node(-1,-1); // para highlight ra
+							adjacentfields = new Node(-1,-1, -1, -1); // para highlight ra
 						}
 					}
 				}
