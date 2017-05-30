@@ -146,28 +146,29 @@
 			if(pick == 1){
 				for(var i = 0; i< 32; i++){
 					if(getHyp(e.pageX, e.pageY, field[i].x + di / 2, field[i].y + di / 2) <= 30 && current && field[i].c == 0){
-						current.x = field[i].x;
-						current.y = field[i].y;
-						field[i].c = 1;
-						current.i = i;
-						currfield = field[current.i];
-						pick = 0;
+						current.x = field[i].x;			// selected piece.x = wheredropped.x
+						current.y = field[i].y;			// selected piece.y = wheredropped.y
+						field[i].c = 1;					// wheredropped field status = occupied
+						current.i = i;					// selected piece position, changed
+						pick = 0;						// status: piece dropped
 					}
 				}
 			}
 			else if(pick == 0){
 				for (var i = 0; i < p1.length; i++) {
 					if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
-						current = p1[i];
-						currfield = field[current.i];
-						pick = 1;
+						current = p1[i];				// selected piece
+						currfield = field[current.i];	// corresponding field
+						field[current.i].c = 0;			// corresponding field status = not occupied
+						pick = 1;						// status: piece picked
 					}
 				}
 				for (var i = 0; i < p2.length; i++) {
 					if (getHyp(e.pageX, e.pageY, p2[i].x + di / 2, p2[i].y + di / 2) <= p2[i].radius) {
-						current = p2[i];
-						currfield = field[current.i];
-						pick = 1;
+						current = p2[i];				// selected piece
+						currfield = field[current.i];	// corresponding field
+						field[current.i].c = 0;			// corresponding field status = not occupied
+						pick = 1;						// status: piece picked
 					}
 				}
 			}
