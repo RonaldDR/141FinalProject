@@ -100,7 +100,7 @@
 			}
 			if(current){
 				current.highlight();			
-			}
+			}	
 		}
 
 		function Tile(x, y, t) {
@@ -138,7 +138,6 @@
 				if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
 					current = p1[i];
 					temp = i;
-					console.log(current);
 				}
 			}
 			for (var i = 0; i < p2.length; i++) {
@@ -151,14 +150,11 @@
 				if(getHyp(e.pageX, e.pageY, states[i].x + di / 2, states[i].y + di / 2) <= p1[temp].radius){
 					current.x = states[i].x;
 					current.y = states[i].y;
-					console.log(current);
 					console.log(p1[temp]);
 				}
 			}
 			
 		});
-
-
 	</script>
 </body>
 </html>
