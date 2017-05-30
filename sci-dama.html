@@ -34,6 +34,10 @@
 		var p2 = [];
 		var field = [];
 		var pick = 0;
+		var adjacentfields = [];
+		var turn = 1;
+		var adjacents1 = [];
+		var adjacents2 = [];
 
 		function generateTiles() {
 			for (var j = inity; j < inity+8*di; j+=di) {
@@ -117,17 +121,129 @@
 			}			
 		}
 
+		function Node(l, r){
+			this.right = r;
+			this.left = l;
+		}
+// =============================MINI FUNCS============================
 		function clearCanvas() {
 			context.fillStyle = '#666';
 			context.fillRect(0,0,canvas.width,canvas.height);
 		}
-
 		function getHyp(x1,y1,x2,y2) {
 			var diffx = x1 - x2;
 			var diffy = y1 - y2;
 			return Math.sqrt(diffx * diffx + diffy * diffy);
 		}
+		function fillAdjacents(){
+			adjacents1[0] = new Node(-1, 4);
+			adjacents1[1] = new Node(4,5);
+			adjacents1[2] = new Node(5,6);
+			adjacents1[3] = new Node(6,7);
+			adjacents1[4] = new Node(8,9);
+			adjacents1[5] = new Node(9,10);
+			adjacents1[6] = new Node(10,11);
+			adjacents1[7] = new Node(11,-1);
+			adjacents1[8] = new Node(-1,12);
+			adjacents1[9] = new Node(12,13);
+			adjacents1[10] = new Node(13,14);
+			adjacents1[11] = new Node(14,15);
+			adjacents1[12] = new Node(16,17);
+			adjacents1[13] = new Node(17,18);
+			adjacents1[14] = new Node(18,19);
+			adjacents1[15] = new Node(19,-1);
+			adjacents1[16] = new Node(-1,20);
+			adjacents1[17] = new Node(20,21);
+			adjacents1[18] = new Node(21,22);
+			adjacents1[19] = new Node(22,23);
+			adjacents1[20] = new Node(24,25);
+			adjacents1[21] = new Node(25,26);
+			adjacents1[22] = new Node(26,27);
+			adjacents1[23] = new Node(27,-1);
+			adjacents1[24] = new Node(-1,28);
+			adjacents1[25] = new Node(28,29);
+			adjacents1[26] = new Node(29,30);
+			adjacents1[27] = new Node(30,31);
+			adjacents1[28] = new Node(-1,-1);
+			adjacents1[29] = new Node(-1,-1);
+			adjacents1[30] = new Node(-1,-1);
+			adjacents1[31] = new Node(-1,-1);
 
+			adjacents2[0] = new Node(-1,-1);
+			adjacents2[1] = new Node(-1,-1);
+			adjacents2[2] = new Node(-1,-1);
+			adjacents2[3] = new Node(-1,-1);
+			adjacents2[4] = new Node(0,1);
+			adjacents2[5] = new Node(1,2);
+			adjacents2[6] = new Node(2,3);
+			adjacents2[7] = new Node(3,-1);
+			adjacents2[8] = new Node(-1,4);
+			adjacents2[9] = new Node(4,5);
+			adjacents2[10] = new Node(5,6);
+			adjacents2[11] = new Node(6,7);
+			adjacents2[12] = new Node(8,9);
+			adjacents2[13] = new Node(9,10);
+			adjacents2[14] = new Node(10,11);
+			adjacents2[15] = new Node(11,-1);
+			adjacents2[16] = new Node(-1,12);
+			adjacents2[17] = new Node(12,13);
+			adjacents2[18] = new Node(13,14);
+			adjacents2[19] = new Node(14,15);
+			adjacents2[20] = new Node(16,17);
+			adjacents2[21] = new Node(17,18);
+			adjacents2[22] = new Node(18,19);
+			adjacents2[23] = new Node(19,-1);
+			adjacents2[24] = new Node(-1,20);
+			adjacents2[25] = new Node(20,21);
+			adjacents2[26] = new Node(21,22);
+			adjacents2[27] = new Node(22,23);
+			adjacents2[28] = new Node(24,25);
+			adjacents2[29] = new Node(25,26);
+			adjacents2[30] = new Node(26,27);
+			adjacents2[31] = new Node(27,-1);
+		}
+		function getAdj(x, p){
+			var adjarr = [];
+			if(p == 1){
+				if(x == 0 || x == 8 || x == 16 || x == 24 || x == 7 ||  x == 15 || x == 23){
+					adjarr.push(x+4);
+				}
+				else if((x > 3 && x < 7) || (x > 11 && x < 15) || (x > 19 && x < 23)){
+					adjarr.push(x+4);
+					adjarr.push(x+5);
+				}
+				else if((x > 8 && x < 12) || (x > 16 && x < 20) || (x > 24 && x < 28)){
+					adjarr.push(x+4);
+					adjarr.push(x+3);
+				}
+
+
+			}
+
+			if(p == 2){
+				if(x == 31 || x == 8 || x == 16 || x == 24 || x == 7 ||  x == 15 || x == 23){
+					adjarr.push(x-4);
+				}
+				else if((x > 3 && x < 7) || (x > 11 && x < 15) || (x > 19 && x < 23)){
+					adjarr.push(x-4);
+					adjarr.push(x-3);
+				}
+				else if((x > 8 && x < 12) || (x > 16 && x < 20) || (x > 24 && x < 28)){
+					adjarr.push(x-4);
+					adjarr.push(x-5);
+				}
+			}
+			
+			return adjarr;
+		}
+		function contains(x, arr){
+			for(var i = 0; i < arr.length; i++){
+				if(x == arr[i]){
+					return true;
+				}
+			}
+		}
+//===================================================================
 		function world() {
 			clearCanvas();
 			for (var i = 0; i < tiles.length; i++) {
@@ -137,38 +253,63 @@
 				p1[i].draw();
 				p2[i].draw();
 			}	
+			for (var i = 0; i < adjacentfields.length; i++){
+				field[adjacentfields[i]].highlight();
+			}
 			if(currfield && pick == 1){
 				currfield.highlight();
 			}
 		}
-		console.log(field.length);
+
 		window.addEventListener('click', function(e) {
 			if(pick == 1){
+				// dropping piece
 				for(var i = 0; i< 32; i++){
 					if(getHyp(e.pageX, e.pageY, field[i].x + di / 2, field[i].y + di / 2) <= 30 && current && field[i].c == 0){
-						current.x = field[i].x;			// selected piece.x = wheredropped.x
-						current.y = field[i].y;			// selected piece.y = wheredropped.y
-						field[i].c = 1;					// wheredropped field status = occupied
-						current.i = i;					// selected piece position, changed
-						pick = 0;						// status: piece dropped
+						if(contains(i, adjacentfields)){
+							current.x = field[i].x;			// selected piece.x = wheredropped.x
+							current.y = field[i].y;			// selected piece.y = wheredropped.y
+							field[i].c = 1;					// wheredropped field status = occupied
+							current.i = i;					// selected piece position, changed
+							pick = 0;						// status: piece dropped
+							adjacentfields = [];			// empty adjacent fields
+
+							if(turn == 1){					// change turn
+								turn = 2;
+							}
+							else{
+								turn = 1;
+							}
+						}
+						if(field[i] == currfield){			// drop piece on place
+							pick = 0;						
+							adjacentfields = [];
+						}
 					}
 				}
 			}
 			else if(pick == 0){
-				for (var i = 0; i < p1.length; i++) {
-					if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
-						current = p1[i];				// selected piece
-						currfield = field[current.i];	// corresponding field
-						field[current.i].c = 0;			// corresponding field status = not occupied
-						pick = 1;						// status: piece picked
+				// picking up piece
+				if(turn == 1){
+					for (var i = 0; i < p1.length; i++) {
+						if (getHyp(e.pageX, e.pageY, p1[i].x + di / 2, p1[i].y + di / 2) <= p1[i].radius) {
+							current = p1[i];				// selected piece
+							currfield = field[current.i];	// corresponding field
+							field[current.i].c = 0;			// corresponding field status = not occupied
+							pick = 1;						// status: piece picked
+							adjacentfields = getAdj(current.i, 1); // collection of adjacent fields
+						}
 					}
 				}
-				for (var i = 0; i < p2.length; i++) {
-					if (getHyp(e.pageX, e.pageY, p2[i].x + di / 2, p2[i].y + di / 2) <= p2[i].radius) {
-						current = p2[i];				// selected piece
-						currfield = field[current.i];	// corresponding field
-						field[current.i].c = 0;			// corresponding field status = not occupied
-						pick = 1;						// status: piece picked
+				if(turn == 2){
+					for (var i = 0; i < p2.length; i++) {
+						if (getHyp(e.pageX, e.pageY, p2[i].x + di / 2, p2[i].y + di / 2) <= p2[i].radius) {
+							current = p2[i];				// selected piece
+							currfield = field[current.i];	// corresponding field
+							field[current.i].c = 0;			// corresponding field status = not occupied
+							pick = 1;						// status: piece picked
+							adjacentfields = getAdj(current.i, 2); // collection of adjacent fields
+						}
 					}
 				}
 			}
