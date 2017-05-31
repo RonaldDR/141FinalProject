@@ -59,8 +59,48 @@ body{
     margin: 0px 0px;
     cursor: pointer;
 }
+.button4{
+	background-image: url("back.png");
+    border: none;
+    color: white;
+    padding: 40px 100px;
+    position:absolute;
+    left: 160px;
+    top: 440px;
+    margin: 0px 0px;
+    cursor: pointer;
+}
 .scidama{
 	position: absolute;
 	left: 15px;
 	top: 1px;
+}
+.mini {
+	position: absolute;
+	left: 35px;
+	top: 20px;
+    display: block;
+    border: 1px solid gray;
+    margin-top: 10px;
+    width: 430px;
+    height: 300px;
+    margin: 10px auto;
+    padding: 10px;
+	color: white;
+	background-image: url("argaoboys.jpg");
+	background-size: 450px 330px;
+	background-repeat: no-repeat;
+}
+.meet{
+	position: absolute;
+	left: 65px;
+	top: 350px;
+    display: block;
+    border: 4px solid gray;
+	width: 370px;
+    height: 60px;
+    margin: 10px auto;
+    padding: 5px;
+	color: white;
+	background-color: #734f3e;
 }
